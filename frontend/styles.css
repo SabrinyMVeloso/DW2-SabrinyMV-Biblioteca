@@ -1,3 +1,31 @@
+/* Toast de feedback */
+.toast {
+    position: fixed;
+    bottom: 2em;
+    right: 2em;
+    background: #fff;
+    color: var(--cor-texto);
+    border: 2px solid var(--cor-acento);
+    border-radius: 8px;
+    box-shadow: 0 2px 12px rgba(30,58,138,0.12);
+    padding: 1em 2em;
+    font-size: 1.1em;
+    z-index: 2000;
+    min-width: 200px;
+    max-width: 90vw;
+    opacity: 0.98;
+    transition: opacity 0.3s;
+}
+.toast.sucesso {
+    border-color: var(--cor-acento);
+    background: #e6f9f2;
+    color: var(--cor-acento);
+}
+.toast.erro {
+    border-color: #b91c1c;
+    background: #fbeaea;
+    color: #b91c1c;
+}
 .export-bar {
     display: flex;
     gap: 1em;

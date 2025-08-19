@@ -1,3 +1,12 @@
+// Toast de feedback
+const toast = document.getElementById('toast');
+function mostrarToast(msg, tipo = 'sucesso') {
+	if (!toast) return;
+	toast.textContent = msg;
+	toast.className = 'toast ' + tipo;
+	toast.style.display = 'block';
+	setTimeout(() => { toast.style.display = 'none'; }, 3000);
+}
 // Exportação CSV/JSON
 const btnExportarCSV = document.getElementById('exportar-csv');
 const btnExportarJSON = document.getElementById('exportar-json');
@@ -144,10 +153,12 @@ formNovoLivro.addEventListener('submit', async function(e) {
 			const erro = await resp.json();
 			throw new Error(erro.detail || 'Erro ao cadastrar livro');
 		}
-		fecharModalNovoLivro();
-		await carregarLivros();
+	fecharModalNovoLivro();
+	mostrarToast('Livro cadastrado com sucesso!', 'sucesso');
+	await carregarLivros();
 	} catch (err) {
-		erroForm.textContent = err.message;
+	erroForm.textContent = err.message;
+	mostrarToast(err.message, 'erro');
 	}
 });
 
@@ -256,10 +267,12 @@ if (btnConfirmarEmprestimo) btnConfirmarEmprestimo.addEventListener('click', asy
 			const erro = await resp.json();
 			throw new Error(erro.detail || 'Erro na operação');
 		}
-		fecharModalEmprestimo();
-		await carregarLivros();
+	fecharModalEmprestimo();
+	mostrarToast('Operação realizada com sucesso!', 'sucesso');
+	await carregarLivros();
 	} catch (err) {
-		erroEmprestimo.textContent = err.message;
+	erroEmprestimo.textContent = err.message;
+	mostrarToast(err.message, 'erro');
 	}
 });
 
