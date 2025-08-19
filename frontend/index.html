@@ -1,0 +1,97 @@
+    <!-- Modal Empréstimo/Devolução -->
+    <div id="modal-emprestimo" class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-emprestimo-titulo" style="display:none;">
+        <div class="modal-conteudo">
+            <h2 id="modal-emprestimo-titulo">Confirmação</h2>
+            <p id="texto-modal-emprestimo"></p>
+            <div class="modal-botoes">
+                <button id="confirmar-emprestimo">Confirmar</button>
+                <button id="cancelar-emprestimo">Cancelar</button>
+            </div>
+            <div id="erro-emprestimo" class="erro-form" aria-live="assertive"></div>
+        </div>
+    </div>
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Biblioteca Escolar</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header class="header">
+        <h1>Biblioteca Escolar</h1>
+        <input type="search" id="search" placeholder="Buscar por título ou autor" aria-label="Buscar livros">
+    </header>
+    <div class="container">
+        <aside class="sidebar">
+            <h2>Filtros</h2>
+            <label for="filtro-genero">Gênero:</label>
+            <select id="filtro-genero">
+                <option value="">Todos</option>
+            </select>
+            <label for="filtro-ano">Ano:</label>
+            <select id="filtro-ano">
+                <option value="">Todos</option>
+            </select>
+            <label for="filtro-status">Status:</label>
+            <select id="filtro-status">
+                <option value="">Todos</option>
+                <option value="disponível">Disponível</option>
+                <option value="emprestado">Emprestado</option>
+            </select>
+            <button id="novo-livro-btn" aria-label="Adicionar novo livro" accesskey="n">+ Novo Livro (Alt+N)</button>
+        </aside>
+        <main class="main-content" id="main-content" tabindex="-1">
+            <div class="ordenacao-bar">
+                <label for="ordenar-por">Ordenar por:</label>
+                <select id="ordenar-por">
+                    <option value="titulo">Título (A-Z)</option>
+                    <option value="ano">Ano (mais recente)</option>
+                </select>
+                <button id="inverter-ordem" title="Inverter ordem" aria-label="Inverter ordem">⇅</button>
+            </div>
+            <div class="export-bar">
+                <button id="exportar-csv">Exportar CSV</button>
+                <button id="exportar-json">Exportar JSON</button>
+            </div>
+            <div id="livros-lista" class="livros-lista" aria-live="polite"></div>
+            <nav class="paginacao-bar" aria-label="Paginação">
+                <button id="pagina-anterior" aria-label="Página anterior">&lt;</button>
+                <span id="paginacao-info"></span>
+                <button id="pagina-proxima" aria-label="Próxima página">&gt;</button>
+            </nav>
+        </main>
+    </div>
+    <!-- Modal Novo Livro -->
+    <div id="modal-novo-livro" class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-novo-livro-titulo" style="display:none;">
+        <div class="modal-conteudo">
+            <h2 id="modal-novo-livro-titulo">Novo Livro</h2>
+            <form id="form-novo-livro" autocomplete="off">
+                <label for="titulo">Título*</label>
+                <input type="text" id="titulo" name="titulo" required minlength="3" maxlength="90">
+                <label for="autor">Autor*</label>
+                <input type="text" id="autor" name="autor" required>
+                <label for="ano">Ano*</label>
+                <input type="number" id="ano" name="ano" required min="1900" max="2099">
+                <label for="genero">Gênero*</label>
+                <input type="text" id="genero" name="genero" required>
+                <label for="isbn">ISBN</label>
+                <input type="text" id="isbn" name="isbn">
+                <label for="status">Status*</label>
+                <select id="status" name="status" required>
+                    <option value="disponível">Disponível</option>
+                    <option value="emprestado">Emprestado</option>
+                </select>
+                <div class="modal-botoes">
+                    <button type="submit">Salvar</button>
+                    <button type="button" id="fechar-modal-novo">Cancelar</button>
+                </div>
+                <div id="erro-form" class="erro-form" aria-live="assertive"></div>
+            </form>
+        </div>
+    </div>
+    <script src="scripts.js"></script>
+</body>
+</html>

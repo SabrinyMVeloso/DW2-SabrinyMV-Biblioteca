@@ -1,0 +1,310 @@
+.export-bar {
+    display: flex;
+    gap: 1em;
+    margin-bottom: 1.2em;
+}
+.export-bar button {
+    background: var(--cor-secundaria);
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    padding: 0.4em 1.2em;
+    font-size: 1em;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+.export-bar button:focus, .export-bar button:hover {
+    background: var(--cor-acento);
+    outline: 2px solid var(--cor-primaria);
+}
+/* Ajuste botão empréstimo nos cards */
+.btn-emprestimo {
+    margin-top: 0.7em;
+    background: var(--cor-acento);
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    padding: 0.4em 1em;
+    font-size: 1em;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+.btn-emprestimo:focus, .btn-emprestimo:hover {
+    background: var(--cor-secundaria);
+    outline: 2px solid var(--cor-primaria);
+}
+/* Modal */
+.modal {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(30,58,138,0.18);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+.modal-conteudo {
+    background: #fff;
+    border-radius: 8px;
+    padding: 2em 2em 1em 2em;
+    min-width: 320px;
+    max-width: 95vw;
+    box-shadow: 0 4px 24px rgba(30,58,138,0.18);
+    display: flex;
+    flex-direction: column;
+    gap: 0.7em;
+}
+.modal-conteudo h2 {
+    margin-top: 0;
+    color: var(--cor-primaria);
+}
+.modal-conteudo label {
+    font-weight: 500;
+    margin-top: 0.7em;
+}
+.modal-conteudo input, .modal-conteudo select {
+    padding: 0.5em;
+    border-radius: 4px;
+    border: 1px solid #d1d5db;
+    font-size: 1em;
+    margin-bottom: 0.2em;
+}
+.modal-botoes {
+    display: flex;
+    gap: 1em;
+    margin-top: 1em;
+}
+.modal-botoes button {
+    background: var(--cor-primaria);
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    padding: 0.5em 1.2em;
+    font-size: 1em;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+.modal-botoes button:focus, .modal-botoes button:hover {
+    background: var(--cor-secundaria);
+    outline: 2px solid var(--cor-acento);
+}
+.erro-form {
+    color: #b91c1c;
+    font-size: 0.98em;
+    margin-top: 0.5em;
+    min-height: 1.2em;
+}
+.paginacao-bar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1em;
+    margin-top: 2em;
+}
+.paginacao-bar button {
+    background: var(--cor-primaria);
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    padding: 0.4em 1em;
+    font-size: 1.1em;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+.paginacao-bar button:focus, .paginacao-bar button:hover {
+    background: var(--cor-secundaria);
+    outline: 2px solid var(--cor-acento);
+}
+.paginacao-bar[aria-label] {
+    font-size: 1.1em;
+}
+.ordenacao-bar {
+    display: flex;
+    align-items: center;
+    gap: 1em;
+    margin-bottom: 1.5em;
+}
+.ordenacao-bar label {
+    font-weight: 500;
+}
+.ordenacao-bar select, .ordenacao-bar button {
+    padding: 0.4em 0.8em;
+    font-size: 1em;
+    border-radius: 4px;
+    border: 1px solid #d1d5db;
+}
+.ordenacao-bar button {
+    background: var(--cor-acento);
+    color: #fff;
+    border: none;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+.ordenacao-bar button:focus, .ordenacao-bar button:hover {
+    background: var(--cor-secundaria);
+    outline: 2px solid var(--cor-primaria);
+}
+
+/* Paleta de cores e fonte */
+:root {
+    --cor-primaria: #1E3A8A;
+    --cor-secundaria: #F59E0B;
+    --cor-acento: #10B981;
+    --cor-fundo: #F8FAFC;
+    --cor-texto: #0F172A;
+    --fonte: 'Inter', 'Roboto', sans-serif;
+}
+
+body {
+    background: var(--cor-fundo);
+    color: var(--cor-texto);
+    font-family: var(--fonte);
+    margin: 0;
+    padding: 0;
+}
+
+.header {
+    background: var(--cor-primaria);
+    color: #fff;
+    padding: 1rem 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    box-shadow: 0 2px 8px rgba(30,58,138,0.08);
+}
+.header h1 {
+    margin: 0;
+    font-size: 2rem;
+    letter-spacing: 1px;
+}
+.header input[type="search"] {
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    font-size: 1rem;
+    min-width: 220px;
+}
+
+.container {
+    display: flex;
+    min-height: 100vh;
+}
+
+.sidebar {
+    background: #fff;
+    border-right: 1px solid #e5e7eb;
+    padding: 2rem 1rem;
+    width: 240px;
+    min-width: 200px;
+    box-shadow: 2px 0 8px rgba(30,58,138,0.03);
+}
+.sidebar h2 {
+    color: var(--cor-primaria);
+    font-size: 1.2rem;
+    margin-top: 0;
+}
+.sidebar label {
+    display: block;
+    margin-top: 1.2em;
+    font-weight: 500;
+}
+.sidebar select, .sidebar button {
+    width: 100%;
+    margin-top: 0.3em;
+    padding: 0.5em;
+    font-size: 1em;
+    border-radius: 4px;
+    border: 1px solid #d1d5db;
+    margin-bottom: 0.5em;
+}
+.sidebar button {
+    background: var(--cor-secundaria);
+    color: #fff;
+    border: none;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+.sidebar button:focus, .sidebar button:hover {
+    background: var(--cor-acento);
+    outline: 2px solid var(--cor-primaria);
+}
+
+.main-content {
+    flex: 1;
+    padding: 2rem;
+    min-width: 0;
+}
+
+.livros-lista {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1.5rem;
+}
+
+/* Card de livro */
+.livro-card {
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(16,185,129,0.08);
+    padding: 1.2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    border-left: 6px solid var(--cor-primaria);
+    transition: box-shadow 0.2s;
+}
+.livro-card[tabindex] {
+    outline: 2px solid var(--cor-acento);
+}
+.livro-card .titulo {
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: var(--cor-primaria);
+}
+.livro-card .autor {
+    color: var(--cor-texto);
+    font-size: 1em;
+}
+.livro-card .ano, .livro-card .genero, .livro-card .status {
+    font-size: 0.95em;
+    color: #555;
+}
+.livro-card .status {
+    font-weight: bold;
+    color: var(--cor-secundaria);
+}
+.livro-card .status.emprestado {
+    color: #b91c1c;
+}
+.livro-card .status.disponivel {
+    color: var(--cor-acento);
+}
+.livro-card button {
+    margin-top: 0.5em;
+    padding: 0.4em 1em;
+    border-radius: 4px;
+    border: none;
+    background: var(--cor-primaria);
+    color: #fff;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+.livro-card button:focus, .livro-card button:hover {
+    background: var(--cor-secundaria);
+    outline: 2px solid var(--cor-acento);
+}
+
+/* Acessibilidade */
+:focus {
+    outline: 2px solid var(--cor-acento) !important;
+    outline-offset: 2px;
+}
