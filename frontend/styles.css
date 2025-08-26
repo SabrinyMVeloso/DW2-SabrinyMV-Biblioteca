@@ -7,7 +7,7 @@
     color: var(--cor-texto);
     border: 2px solid var(--cor-acento);
     border-radius: 8px;
-    box-shadow: 0 2px 12px rgba(30,58,138,0.12);
+    box-shadow: 0 2px 12px rgba(30, 58, 138, 0.12);
     padding: 1em 2em;
     font-size: 1.1em;
     z-index: 2000;
@@ -16,21 +16,25 @@
     opacity: 0.98;
     transition: opacity 0.3s;
 }
+
 .toast.sucesso {
     border-color: var(--cor-acento);
     background: #e6f9f2;
     color: var(--cor-acento);
 }
+
 .toast.erro {
     border-color: #b91c1c;
     background: #fbeaea;
     color: #b91c1c;
 }
+
 .export-bar {
     display: flex;
     gap: 1em;
     margin-bottom: 1.2em;
 }
+
 .export-bar button {
     background: var(--cor-secundaria);
     color: #fff;
@@ -42,10 +46,13 @@
     cursor: pointer;
     transition: background 0.2s;
 }
-.export-bar button:focus, .export-bar button:hover {
+
+.export-bar button:focus,
+.export-bar button:hover {
     background: var(--cor-acento);
     outline: 2px solid var(--cor-primaria);
 }
+
 /* Ajuste botão empréstimo nos cards */
 .btn-emprestimo {
     margin-top: 0.7em;
@@ -59,51 +66,64 @@
     cursor: pointer;
     transition: background 0.2s;
 }
-.btn-emprestimo:focus, .btn-emprestimo:hover {
+
+.btn-emprestimo:focus,
+.btn-emprestimo:hover {
     background: var(--cor-secundaria);
     outline: 2px solid var(--cor-primaria);
 }
+
 /* Modal */
 .modal {
     position: fixed;
-    top: 0; left: 0; right: 0; bottom: 0;
-    background: rgba(30,58,138,0.18);
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(30, 58, 138, 0.18);
     display: flex;
     align-items: center;
     justify-content: center;
     z-index: 1000;
 }
+
 .modal-conteudo {
     background: #fff;
     border-radius: 8px;
     padding: 2em 2em 1em 2em;
     min-width: 320px;
     max-width: 95vw;
-    box-shadow: 0 4px 24px rgba(30,58,138,0.18);
+    box-shadow: 0 4px 24px rgba(30, 58, 138, 0.18);
     display: flex;
     flex-direction: column;
     gap: 0.7em;
 }
+
 .modal-conteudo h2 {
     margin-top: 0;
     color: var(--cor-primaria);
 }
+
 .modal-conteudo label {
     font-weight: 500;
     margin-top: 0.7em;
 }
-.modal-conteudo input, .modal-conteudo select {
+
+.modal-conteudo input,
+.modal-conteudo select {
     padding: 0.5em;
     border-radius: 4px;
     border: 1px solid #d1d5db;
     font-size: 1em;
     margin-bottom: 0.2em;
 }
+
 .modal-botoes {
     display: flex;
     gap: 1em;
     margin-top: 1em;
 }
+
 .modal-botoes button {
     background: var(--cor-primaria);
     color: #fff;
@@ -115,16 +135,20 @@
     cursor: pointer;
     transition: background 0.2s;
 }
-.modal-botoes button:focus, .modal-botoes button:hover {
+
+.modal-botoes button:focus,
+.modal-botoes button:hover {
     background: var(--cor-secundaria);
     outline: 2px solid var(--cor-acento);
 }
+
 .erro-form {
     color: #b91c1c;
     font-size: 0.98em;
     margin-top: 0.5em;
     min-height: 1.2em;
 }
+
 .paginacao-bar {
     display: flex;
     align-items: center;
@@ -132,6 +156,7 @@
     gap: 1em;
     margin-top: 2em;
 }
+
 .paginacao-bar button {
     background: var(--cor-primaria);
     color: #fff;
@@ -142,28 +167,36 @@
     cursor: pointer;
     transition: background 0.2s;
 }
-.paginacao-bar button:focus, .paginacao-bar button:hover {
+
+.paginacao-bar button:focus,
+.paginacao-bar button:hover {
     background: var(--cor-secundaria);
     outline: 2px solid var(--cor-acento);
 }
+
 .paginacao-bar[aria-label] {
     font-size: 1.1em;
 }
+
 .ordenacao-bar {
     display: flex;
     align-items: center;
     gap: 1em;
     margin-bottom: 1.5em;
 }
+
 .ordenacao-bar label {
     font-weight: 500;
 }
-.ordenacao-bar select, .ordenacao-bar button {
+
+.ordenacao-bar select,
+.ordenacao-bar button {
     padding: 0.4em 0.8em;
     font-size: 1em;
     border-radius: 4px;
     border: 1px solid #d1d5db;
 }
+
 .ordenacao-bar button {
     background: var(--cor-acento);
     color: #fff;
@@ -172,7 +205,9 @@
     cursor: pointer;
     transition: background 0.2s;
 }
-.ordenacao-bar button:focus, .ordenacao-bar button:hover {
+
+.ordenacao-bar button:focus,
+.ordenacao-bar button:hover {
     background: var(--cor-secundaria);
     outline: 2px solid var(--cor-primaria);
 }
@@ -205,13 +240,15 @@ body {
     position: sticky;
     top: 0;
     z-index: 10;
-    box-shadow: 0 2px 8px rgba(30,58,138,0.08);
+    box-shadow: 0 2px 8px rgba(30, 58, 138, 0.08);
 }
+
 .header h1 {
     margin: 0;
     font-size: 2rem;
     letter-spacing: 1px;
 }
+
 .header input[type="search"] {
     padding: 0.5rem 1rem;
     border-radius: 4px;
@@ -231,19 +268,23 @@ body {
     padding: 2rem 1rem;
     width: 240px;
     min-width: 200px;
-    box-shadow: 2px 0 8px rgba(30,58,138,0.03);
+    box-shadow: 2px 0 8px rgba(30, 58, 138, 0.03);
 }
+
 .sidebar h2 {
     color: var(--cor-primaria);
     font-size: 1.2rem;
     margin-top: 0;
 }
+
 .sidebar label {
     display: block;
     margin-top: 1.2em;
     font-weight: 500;
 }
-.sidebar select, .sidebar button {
+
+.sidebar select,
+.sidebar button {
     width: 100%;
     margin-top: 0.3em;
     padding: 0.5em;
@@ -252,6 +293,7 @@ body {
     border: 1px solid #d1d5db;
     margin-bottom: 0.5em;
 }
+
 .sidebar button {
     background: var(--cor-secundaria);
     color: #fff;
@@ -260,7 +302,9 @@ body {
     cursor: pointer;
     transition: background 0.2s;
 }
-.sidebar button:focus, .sidebar button:hover {
+
+.sidebar button:focus,
+.sidebar button:hover {
     background: var(--cor-acento);
     outline: 2px solid var(--cor-primaria);
 }
@@ -281,7 +325,7 @@ body {
 .livro-card {
     background: #fff;
     border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(16,185,129,0.08);
+    box-shadow: 0 2px 8px rgba(16, 185, 129, 0.08);
     padding: 1.2rem;
     display: flex;
     flex-direction: column;
@@ -289,32 +333,53 @@ body {
     border-left: 6px solid var(--cor-primaria);
     transition: box-shadow 0.2s;
 }
+
+.capa-livro {
+    width: 100px;
+    height: auto;
+    align-self: center;
+    border-radius: 6px;
+    box-shadow: 0 2px 8px #0001;
+    margin-bottom: 0.7em;
+    object-fit: cover;
+    background: #f3f3f3;
+}
+
 .livro-card[tabindex] {
     outline: 2px solid var(--cor-acento);
 }
+
 .livro-card .titulo {
     font-size: 1.1rem;
     font-weight: bold;
     color: var(--cor-primaria);
 }
+
 .livro-card .autor {
     color: var(--cor-texto);
     font-size: 1em;
 }
-.livro-card .ano, .livro-card .genero, .livro-card .status {
+
+.livro-card .ano,
+.livro-card .genero,
+.livro-card .status {
     font-size: 0.95em;
     color: #555;
 }
+
 .livro-card .status {
     font-weight: bold;
     color: var(--cor-secundaria);
 }
+
 .livro-card .status.emprestado {
     color: #b91c1c;
 }
+
 .livro-card .status.disponivel {
     color: var(--cor-acento);
 }
+
 .livro-card button {
     margin-top: 0.5em;
     padding: 0.4em 1em;
@@ -326,7 +391,9 @@ body {
     cursor: pointer;
     transition: background 0.2s;
 }
-.livro-card button:focus, .livro-card button:hover {
+
+.livro-card button:focus,
+.livro-card button:hover {
     background: var(--cor-secundaria);
     outline: 2px solid var(--cor-acento);
 }

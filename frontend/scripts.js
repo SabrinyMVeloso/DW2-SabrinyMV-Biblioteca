@@ -43,9 +43,9 @@ function exportarCSV() {
 	if (!livros.length) return;
 	const header = Object.keys(livros[0]);
 	const csv = [header.join(',')].concat(
-		livros.map(l => header.map(h => '"'+String(l[h]).replace(/"/g,'""')+'"').join(','))
+		livros.map(l => header.map(h => '"' + String(l[h]).replace(/"/g, '""') + '"').join(','))
 	).join('\r\n');
-	const blob = new Blob([csv], {type: 'text/csv'});
+	const blob = new Blob([csv], { type: 'text/csv' });
 	const url = URL.createObjectURL(blob);
 	const a = document.createElement('a');
 	a.href = url;
@@ -59,7 +59,7 @@ function exportarCSV() {
 function exportarJSON() {
 	const livros = getLivrosFiltrados();
 	if (!livros.length) return;
-	const blob = new Blob([JSON.stringify(livros, null, 2)], {type: 'application/json'});
+	const blob = new Blob([JSON.stringify(livros, null, 2)], { type: 'application/json' });
 	const url = URL.createObjectURL(blob);
 	const a = document.createElement('a');
 	a.href = url;
@@ -103,7 +103,7 @@ window.addEventListener('keydown', e => {
 });
 
 // Validação e envio do formulário
-formNovoLivro.addEventListener('submit', async function(e) {
+formNovoLivro.addEventListener('submit', async function (e) {
 	e.preventDefault();
 	erroForm.textContent = '';
 	const dados = {
@@ -153,12 +153,12 @@ formNovoLivro.addEventListener('submit', async function(e) {
 			const erro = await resp.json();
 			throw new Error(erro.detail || 'Erro ao cadastrar livro');
 		}
-	fecharModalNovoLivro();
-	mostrarToast('Livro cadastrado com sucesso!', 'sucesso');
-	await carregarLivros();
+		fecharModalNovoLivro();
+		mostrarToast('Livro cadastrado com sucesso!', 'sucesso');
+		await carregarLivros();
 	} catch (err) {
-	erroForm.textContent = err.message;
-	mostrarToast(err.message, 'erro');
+		erroForm.textContent = err.message;
+		mostrarToast(err.message, 'erro');
 	}
 });
 
@@ -208,8 +208,27 @@ function exibirLivros(livros) {
 		listaLivros.innerHTML = '<p>Nenhum livro encontrado.</p>';
 		return;
 	}
-	listaLivros.innerHTML = livros.map(livro => `
+	listaLivros.innerHTML = livros.map(livro => {
+		// Monta o nome do arquivo da capa baseado no título
+		const map = {
+			'O Pequeno Príncipe': 'pequeno-principe.webp',
+			'Dom Casmurro': 'dom-casmurro.jpg',
+			'1984': '1984.jpg',
+			'A Menina que Roubava Livros': 'menina-que-roubava-livros.jpg',
+			'Harry Potter e a Pedra Filosofal': 'harry-potter.jpg',
+			'O Hobbit': 'o-hobbit.jpg',
+			'Capitães da Areia': 'capitaes-da-areia.jpg',
+			'O Alquimista': 'o-alquimista.jpg',
+			'O Senhor dos Anéis': 'senhor-dos-aneis.webp',
+			'A Revolução dos Bichos': 'revolucao-dos-bichos.jpg'
+		};
+		let nomeCapa = map[livro.titulo];
+		if (!nomeCapa) {
+			nomeCapa = 'sem-capa.png'; // imagem genérica para livros sem capa
+		}
+		return `
 		<div class="livro-card" tabindex="0" aria-label="Livro: ${livro.titulo}">
+			<img src="capas/${nomeCapa}" alt="Capa do livro ${livro.titulo}" class="capa-livro" style="width:100px; height:auto; align-self:center; border-radius:6px; box-shadow:0 2px 8px #0001; margin-bottom:0.7em;" />
 			<div class="titulo">${livro.titulo}</div>
 			<div class="autor">${livro.autor}</div>
 			<div class="ano">Ano: ${livro.ano}</div>
@@ -219,7 +238,8 @@ function exibirLivros(livros) {
 				${livro.status === 'disponível' ? 'Emprestar' : 'Devolver'}
 			</button>
 		</div>
-	`).join('');
+		`;
+	}).join('');
 	// Adicionar eventos aos botões de empréstimo/devolução
 	document.querySelectorAll('.btn-emprestimo').forEach(btn => {
 		btn.addEventListener('click', abrirModalEmprestimo);
@@ -258,7 +278,7 @@ window.addEventListener('keydown', e => {
 	if (modalEmprestimo.style.display === 'flex' && e.key === 'Escape') fecharModalEmprestimo();
 });
 
-if (btnConfirmarEmprestimo) btnConfirmarEmprestimo.addEventListener('click', async function() {
+if (btnConfirmarEmprestimo) btnConfirmarEmprestimo.addEventListener('click', async function () {
 	if (!livroSelecionado || !acaoEmprestimo) return;
 	erroEmprestimo.textContent = '';
 	try {
@@ -267,12 +287,12 @@ if (btnConfirmarEmprestimo) btnConfirmarEmprestimo.addEventListener('click', asy
 			const erro = await resp.json();
 			throw new Error(erro.detail || 'Erro na operação');
 		}
-	fecharModalEmprestimo();
-	mostrarToast('Operação realizada com sucesso!', 'sucesso');
-	await carregarLivros();
+		fecharModalEmprestimo();
+		mostrarToast('Operação realizada com sucesso!', 'sucesso');
+		await carregarLivros();
 	} catch (err) {
-	erroEmprestimo.textContent = err.message;
-	mostrarToast(err.message, 'erro');
+		erroEmprestimo.textContent = err.message;
+		mostrarToast(err.message, 'erro');
 	}
 });
 
@@ -282,7 +302,7 @@ function preencherFiltros(livros) {
 	const generos = [...new Set(livros.map(l => l.genero))].sort();
 	filtroGenero.innerHTML = '<option value="">Todos</option>' + generos.map(g => `<option value="${g}">${g}</option>`).join('');
 	// Anos
-	const anos = [...new Set(livros.map(l => l.ano))].sort((a,b) => b-a);
+	const anos = [...new Set(livros.map(l => l.ano))].sort((a, b) => b - a);
 	filtroAno.innerHTML = '<option value="">Todos</option>' + anos.map(a => `<option value="${a}">${a}</option>`).join('');
 }
 
@@ -319,7 +339,12 @@ function aplicarFiltros() {
 	// Paginação
 	const totalLivros = filtrados.length;
 	const totalPaginas = Math.ceil(totalLivros / livrosPorPagina) || 1;
-	if (paginaAtual > totalPaginas) paginaAtual = totalPaginas;
+	if (paginaAtual > totalPaginas) {
+		paginaAtual = totalPaginas;
+		// Reaplica para garantir que não mostre página vazia
+		aplicarFiltros();
+		return;
+	}
 	const inicio = (paginaAtual - 1) * livrosPorPagina;
 	const fim = inicio + livrosPorPagina;
 	const paginaLivros = filtrados.slice(inicio, fim);

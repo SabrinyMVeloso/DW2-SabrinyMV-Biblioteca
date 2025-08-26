@@ -1,26 +1,29 @@
-    <!-- Toast de feedback -->
-    <div id="toast" class="toast" role="status" aria-live="polite" style="display:none;"></div>
-    <!-- Modal Empréstimo/Devolução -->
-    <div id="modal-emprestimo" class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-emprestimo-titulo" style="display:none;">
-        <div class="modal-conteudo">
-            <h2 id="modal-emprestimo-titulo">Confirmação</h2>
-            <p id="texto-modal-emprestimo"></p>
-            <div class="modal-botoes">
-                <button id="confirmar-emprestimo">Confirmar</button>
-                <button id="cancelar-emprestimo">Cancelar</button>
-            </div>
-            <div id="erro-emprestimo" class="erro-form" aria-live="assertive"></div>
+<!-- Toast de feedback -->
+<div id="toast" class="toast" role="status" aria-live="polite" style="display:none;"></div>
+<!-- Modal Empréstimo/Devolução -->
+<div id="modal-emprestimo" class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-emprestimo-titulo"
+    style="display:none;">
+    <div class="modal-conteudo">
+        <h2 id="modal-emprestimo-titulo">Confirmação</h2>
+        <p id="texto-modal-emprestimo"></p>
+        <div class="modal-botoes">
+            <button id="confirmar-emprestimo">Confirmar</button>
+            <button id="cancelar-emprestimo">Cancelar</button>
         </div>
+        <div id="erro-emprestimo" class="erro-form" aria-live="assertive"></div>
     </div>
+</div>
 
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Biblioteca Escolar</title>
     <link rel="stylesheet" href="styles.css">
 </head>
+
 <body>
     <header class="header">
         <h1>Biblioteca Escolar</h1>
@@ -67,7 +70,8 @@
         </main>
     </div>
     <!-- Modal Novo Livro -->
-    <div id="modal-novo-livro" class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-novo-livro-titulo" style="display:none;">
+    <div id="modal-novo-livro" class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-novo-livro-titulo"
+        style="display:none;">
         <div class="modal-conteudo">
             <h2 id="modal-novo-livro-titulo">Novo Livro</h2>
             <form id="form-novo-livro" autocomplete="off">
@@ -96,4 +100,5 @@
     </div>
     <script src="scripts.js"></script>
 </body>
+
 </html>

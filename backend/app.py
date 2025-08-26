@@ -1,4 +1,5 @@
 
+
 from fastapi import FastAPI, HTTPException, status, Depends
 from sqlalchemy.orm import Session
 from typing import List, Optional
@@ -6,8 +7,19 @@ from datetime import datetime
 from models import Livro, StatusEnum
 from database import SessionLocal, criar_tabelas
 from pydantic import BaseModel, Field
+from fastapi.middleware.cors import CORSMiddleware
+
 
 app = FastAPI()
+
+# Configuração de CORS para permitir acesso do frontend
+app.add_middleware(
+	CORSMiddleware,
+	allow_origins=["*"],  # Em produção, especifique o domínio do frontend
+	allow_credentials=True,
+	allow_methods=["*"],
+	allow_headers=["*"],
+)
 
 # Dependência para obter sessão do banco
 def get_db():
