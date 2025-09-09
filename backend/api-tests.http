@@ -1,0 +1,44 @@
+### Testes de API para Biblioteca Escolar
+
+# Listar todos os livros
+GET http://localhost:8000/livros
+Accept: application/json
+
+### Obter um livro específico
+GET http://localhost:8000/livros/1
+Accept: application/json
+
+### Criar um novo livro
+POST http://localhost:8000/livros
+Content-Type: application/json
+
+{
+  "titulo": "Novo Livro Teste",
+  "autor": "Autor Teste",
+  "ano": 2020,
+  "genero": "Teste",
+  "isbn": "1234567890",
+  "status": "disponível"
+}
+
+### Atualizar um livro
+PUT http://localhost:8000/livros/1
+Content-Type: application/json
+
+{
+  "titulo": "Novo Livro Teste Editado",
+  "autor": "Autor Teste",
+  "ano": 2021,
+  "genero": "Teste",
+  "isbn": "1234567890",
+  "status": "disponível"
+}
+
+### Deletar um livro
+DELETE http://localhost:8000/livros/1
+
+### Emprestar um livro
+POST http://localhost:8000/livros/2/emprestar
+
+### Devolver um livro
+POST http://localhost:8000/livros/2/devolver

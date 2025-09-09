@@ -78,7 +78,30 @@
 
 ## 8. Prints/GIFs de funcionamento
 
-(Adicione aqui prints de tela do sistema rodando: catálogo, filtros, modais, exportação, toast, acessibilidade, etc.)
+### Prints/GIFs de funcionamento
+
+Adicione aqui imagens do sistema rodando:
+
+- Catálogo de livros
+- Filtros aplicados
+- Modal de novo livro
+- Modal de empréstimo/devolução
+- Exportação CSV/JSON
+- Toasts de feedback
+- Paginação
+- Acessibilidade (foco, contraste, navegação por teclado)
+
+**Como adicionar prints:**
+1. Capture a tela usando a tecla `Print Screen` ou a ferramenta de captura do Windows.
+2. Salve a imagem na pasta do projeto (ex: `prints/`).
+3. Insira o print aqui usando a sintaxe:
+   `![Descrição](../prints/nome-do-arquivo.png)`
+
+**Como adicionar GIFs:**
+1. Grave a tela usando uma ferramenta como ScreenToGif ou ShareX.
+2. Salve o GIF na pasta do projeto.
+3. Insira o GIF aqui usando a sintaxe:
+   `![Descrição](../prints/nome-do-arquivo.gif)`
 
 ## 9. Limitações e Melhorias Futuras
 

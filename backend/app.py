@@ -33,7 +33,7 @@ def get_db():
 class LivroBase(BaseModel):
 	titulo: str = Field(..., min_length=3, max_length=90)
 	autor: str
-	ano: int = Field(..., ge=1900, le=datetime.now().year)
+	ano: int = Field(..., ge=1800, le=datetime.now().year)
 	genero: str
 	isbn: Optional[str] = None
 	status: StatusEnum = StatusEnum.disponivel
