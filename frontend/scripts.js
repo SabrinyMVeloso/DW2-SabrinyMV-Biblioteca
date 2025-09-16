@@ -18,7 +18,7 @@ function getLivrosFiltrados() {
 	const status = filtroStatus.value;
 	const busca = searchInput.value.trim().toLowerCase();
 	if (genero) filtrados = filtrados.filter(l => l.genero === genero);
-	if (ano) filtrados = filtrados.filter(l => String(l.ano) === ano);
+	if (ano) filtrados = filtrados.filter(l => String(l.ano) === String(ano));
 	if (status) filtrados = filtrados.filter(l => l.status === status);
 	if (busca) filtrados = filtrados.filter(l =>
 		l.titulo.toLowerCase().includes(busca) ||
@@ -106,48 +106,53 @@ window.addEventListener('keydown', e => {
 formNovoLivro.addEventListener('submit', async function (e) {
 	e.preventDefault();
 	erroForm.textContent = '';
-	const dados = {
-		titulo: formNovoLivro.titulo.value.trim(),
-		autor: formNovoLivro.autor.value.trim(),
-		ano: Number(formNovoLivro.ano.value),
-		genero: formNovoLivro.genero.value.trim(),
-		isbn: formNovoLivro.isbn.value.trim(),
-		status: formNovoLivro.status.value
-	};
+	const titulo = formNovoLivro.titulo.value.trim();
+	const autor = formNovoLivro.autor.value.trim();
+	const ano = Number(formNovoLivro.ano.value);
+	const genero = formNovoLivro.genero.value.trim();
+	const isbn = formNovoLivro.isbn.value.trim();
+	const status = formNovoLivro.status.value;
+	const capaFile = formNovoLivro.capa.files[0];
 	// Validações front-end
-	if (dados.titulo.length < 3 || dados.titulo.length > 90) {
+	if (titulo.length < 3 || titulo.length > 90) {
 		erroForm.textContent = 'Título deve ter entre 3 e 90 caracteres.';
 		formNovoLivro.titulo.focus();
 		return;
 	}
-	if (!dados.autor) {
+	if (!autor) {
 		erroForm.textContent = 'Autor é obrigatório.';
 		formNovoLivro.autor.focus();
 		return;
 	}
 	const anoAtual = new Date().getFullYear();
-	if (dados.ano < 1900 || dados.ano > anoAtual) {
+	if (ano < 1900 || ano > anoAtual) {
 		erroForm.textContent = `Ano deve ser entre 1900 e ${anoAtual}.`;
 		formNovoLivro.ano.focus();
 		return;
 	}
-	if (!dados.genero) {
+	if (!genero) {
 		erroForm.textContent = 'Gênero é obrigatório.';
 		formNovoLivro.genero.focus();
 		return;
 	}
-	// Impedir título duplicado no array local
-	if (livrosOriginais.some(l => l.titulo.toLowerCase() === dados.titulo.toLowerCase())) {
+	if (livrosOriginais.some(l => l.titulo.toLowerCase() === titulo.toLowerCase())) {
 		erroForm.textContent = 'Já existe um livro com esse título.';
 		formNovoLivro.titulo.focus();
 		return;
 	}
-	// Enviar para API
+	// Enviar para API (FormData)
 	try {
+		const formData = new FormData();
+		formData.append('titulo', titulo);
+		formData.append('autor', autor);
+		formData.append('ano', ano);
+		formData.append('genero', genero);
+		formData.append('isbn', isbn);
+		formData.append('status', status);
+		if (capaFile) formData.append('capa', capaFile);
 		const resp = await fetch(API_URL, {
 			method: 'POST',
-			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify(dados)
+			body: formData
 		});
 		if (!resp.ok) {
 			const erro = await resp.json();
@@ -164,7 +169,7 @@ formNovoLivro.addEventListener('submit', async function (e) {
 
 
 // URL da API backend
-const API_URL = 'http://localhost:8000/livros';
+const API_URL = 'http://127.0.0.1:8000/livros';
 
 // Elementos DOM
 const listaLivros = document.getElementById('livros-lista');
@@ -209,26 +214,33 @@ function exibirLivros(livros) {
 		return;
 	}
 	listaLivros.innerHTML = livros.map(livro => {
-		// Monta o nome do arquivo da capa baseado no título
+		let nomeCapa = 'sem-capa.png';
+		// Mapeamento de capa, gênero e ano para livros conhecidos
 		const map = {
-			'O Pequeno Príncipe': 'pequeno-principe.webp',
-			'Dom Casmurro': 'dom-casmurro.jpg',
-			'1984': '1984.jpg',
-			'A Menina que Roubava Livros': 'menina-que-roubava-livros.jpg',
-			'Harry Potter e a Pedra Filosofal': 'harry-potter.jpg',
-			'O Hobbit': 'o-hobbit.jpg',
-			'Capitães da Areia': 'capitaes-da-areia.jpg',
-			'O Alquimista': 'o-alquimista.jpg',
-			'O Senhor dos Anéis': 'senhor-dos-aneis.webp',
-			'A Revolução dos Bichos': 'revolucao-dos-bichos.jpg'
+			'O Pequeno Príncipe': {capa: 'pequeno-principe.webp', genero: 'Infantojuvenil', ano: 1943},
+			'Dom Casmurro': {capa: 'dom-casmurro.jpg', genero: 'Clássico', ano: 1899},
+			'1984': {capa: '1984.jpg', genero: 'Distopia', ano: 1949},
+			'A Menina que Roubava Livros': {capa: 'menina-que-roubava-livros.jpg', genero: 'Drama', ano: 2005},
+			'Harry Potter e a Pedra Filosofal': {capa: 'harry-potter.jpg', genero: 'Fantasia', ano: 1997},
+			'O Hobbit': {capa: 'o-hobbit.jpg', genero: 'Fantasia', ano: 1937},
+			'Capitães da Areia': {capa: 'capitaes-da-areia.jpg', genero: 'Drama', ano: 1937},
+			'O Alquimista': {capa: 'o-alquimista.jpg', genero: 'Aventura', ano: 1988},
+			'O Senhor dos Anéis': {capa: 'senhor-dos-aneis.webp', genero: 'Fantasia', ano: 1954},
+			'A Revolução dos Bichos': {capa: 'revolucao-dos-bichos.jpg', genero: 'Distopia', ano: 1945}
 		};
-		let nomeCapa = map[livro.titulo];
-		if (!nomeCapa) {
-			nomeCapa = 'sem-capa.png'; // imagem genérica para livros sem capa
+		if (livro.capa) {
+			nomeCapa = `/capas/${livro.capa}`;
+		} else if (map[livro.titulo]) {
+			nomeCapa = `capas/${map[livro.titulo].capa}`;
+			if (!livro.genero || livro.genero === 'Outros') livro.genero = map[livro.titulo].genero;
+			if (!livro.ano) livro.ano = map[livro.titulo].ano;
+		} else {
+			nomeCapa = 'capas/sem-capa.png';
+			if (!livro.genero) livro.genero = 'Outros';
 		}
 		return `
 		<div class="livro-card" tabindex="0" aria-label="Livro: ${livro.titulo}">
-			<img src="capas/${nomeCapa}" alt="Capa do livro ${livro.titulo}" class="capa-livro" style="width:100px; height:auto; align-self:center; border-radius:6px; box-shadow:0 2px 8px #0001; margin-bottom:0.7em;" />
+			<img src="${nomeCapa}" alt="Capa do livro ${livro.titulo}" class="capa-livro" style="width:100px; height:auto; align-self:center; border-radius:6px; box-shadow:0 2px 8px #0001; margin-bottom:0.7em;" />
 			<div class="titulo">${livro.titulo}</div>
 			<div class="autor">${livro.autor}</div>
 			<div class="ano">Ano: ${livro.ano}</div>
@@ -298,12 +310,10 @@ if (btnConfirmarEmprestimo) btnConfirmarEmprestimo.addEventListener('click', asy
 
 // Preencher filtros de gênero e ano
 function preencherFiltros(livros) {
-	// Gêneros
-	const generos = [...new Set(livros.map(l => l.genero))].sort();
-	filtroGenero.innerHTML = '<option value="">Todos</option>' + generos.map(g => `<option value="${g}">${g}</option>`).join('');
-	// Anos
-	const anos = [...new Set(livros.map(l => l.ano))].sort((a, b) => b - a);
-	filtroAno.innerHTML = '<option value="">Todos</option>' + anos.map(a => `<option value="${a}">${a}</option>`).join('');
+	// Gêneros fixos (já no HTML)
+	// Anos presentes nos livros, ordenados decrescente
+	let anosUnicos = [...new Set(livros.map(l => l.ano))].sort((a, b) => b - a);
+	filtroAno.innerHTML = '<option value="">Todos</option>' + anosUnicos.map(a => `<option value="${a}">${a}</option>`).join('');
 }
 
 

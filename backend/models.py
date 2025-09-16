@@ -19,3 +19,4 @@ class Livro(Base):
 	isbn = Column(String(20), nullable=True)
 	status = Column(Enum(StatusEnum), nullable=False, default=StatusEnum.disponivel)
 	data_emprestimo = Column(DateTime, nullable=True)
+	capa = Column(String(120), nullable=True)  # nome do arquivo da capa customizada

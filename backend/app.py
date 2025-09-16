@@ -1,6 +1,6 @@
 
 
-from fastapi import FastAPI, HTTPException, status, Depends
+from fastapi import FastAPI, HTTPException, status, Depends, File, UploadFile, Form
 from sqlalchemy.orm import Session
 from typing import List, Optional
 from datetime import datetime
@@ -8,6 +8,8 @@ from models import Livro, StatusEnum
 from database import SessionLocal, criar_tabelas
 from pydantic import BaseModel, Field
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import FileResponse
+import os
 
 
 app = FastAPI()
@@ -37,9 +39,12 @@ class LivroBase(BaseModel):
 	genero: str
 	isbn: Optional[str] = None
 	status: StatusEnum = StatusEnum.disponivel
+	capa: Optional[str] = None
+
 
 class LivroCreate(LivroBase):
 	pass
+
 
 class LivroUpdate(LivroBase):
 	pass
@@ -47,6 +52,7 @@ class LivroUpdate(LivroBase):
 class LivroOut(LivroBase):
 	id: int
 	data_emprestimo: Optional[datetime]
+	capa: Optional[str]
 	class Config:
 		orm_mode = True
 
@@ -65,15 +71,52 @@ def obter_livro(livro_id: int, db: Session = Depends(get_db)):
 		raise HTTPException(status_code=404, detail="Livro não encontrado")
 	return livro
 
+
+# Pasta para uploads de capas
+UPLOAD_DIR = os.path.join(os.path.dirname(__file__), '..', 'frontend', 'capas')
+os.makedirs(UPLOAD_DIR, exist_ok=True)
+
 @app.post("/livros", response_model=LivroOut, status_code=status.HTTP_201_CREATED)
-def criar_livro(livro: LivroCreate, db: Session = Depends(get_db)):
-	if db.query(Livro).filter(Livro.titulo == livro.titulo).first():
+async def criar_livro(
+	titulo: str = Form(...),
+	autor: str = Form(...),
+	ano: int = Form(...),
+	genero: str = Form(...),
+	isbn: Optional[str] = Form(None),
+	status: StatusEnum = Form(StatusEnum.disponivel),
+	capa: Optional[UploadFile] = File(None),
+	db: Session = Depends(get_db)
+):
+	if db.query(Livro).filter(Livro.titulo == titulo).first():
 		raise HTTPException(status_code=400, detail="Título já cadastrado")
-	novo_livro = Livro(**livro.dict())
+	nome_arquivo = None
+	if capa:
+		ext = os.path.splitext(capa.filename)[1].lower()
+		nome_arquivo = f"capa_{titulo.replace(' ', '_')}_{int(datetime.now().timestamp())}{ext}"
+		caminho = os.path.join(UPLOAD_DIR, nome_arquivo)
+		with open(caminho, "wb") as f:
+			f.write(await capa.read())
+	novo_livro = Livro(
+		titulo=titulo,
+		autor=autor,
+		ano=ano,
+		genero=genero,
+		isbn=isbn,
+		status=status,
+		capa=nome_arquivo
+	)
 	db.add(novo_livro)
 	db.commit()
 	db.refresh(novo_livro)
 	return novo_livro
+
+# Servir arquivos de capa customizada
+@app.get("/capas/{nome_capa}")
+def get_capa(nome_capa: str):
+	caminho = os.path.join(UPLOAD_DIR, nome_capa)
+	if not os.path.exists(caminho):
+		raise HTTPException(status_code=404, detail="Capa não encontrada")
+	return FileResponse(caminho)
 
 @app.put("/livros/{livro_id}", response_model=LivroOut)
 def atualizar_livro(livro_id: int, livro: LivroUpdate, db: Session = Depends(get_db)):

@@ -32,8 +32,17 @@
     <div class="container">
         <aside class="sidebar">
             <h2>Filtros</h2>
-            <label for="filtro-genero">Gênero:</label>
             <select id="filtro-genero">
+    <option value="">Todos</option>
+    <option value="Aventura">Aventura</option>
+    <option value="Romance">Romance</option>
+    <option value="Fantasia">Fantasia</option>
+    <option value="Drama">Drama</option>
+    <option value="Clássico">Clássico</option>
+    <option value="Infantojuvenil">Infantojuvenil</option>
+    <option value="Distopia">Distopia</option>
+    <option value="Outros">Outros</option>
+</select>
                 <option value="">Todos</option>
             </select>
             <label for="filtro-ano">Ano:</label>
@@ -90,6 +99,8 @@
                     <option value="disponível">Disponível</option>
                     <option value="emprestado">Emprestado</option>
                 </select>
+                <label for="capa">Capa (opcional)</label>
+                <input type="file" id="capa" name="capa" accept="image/*">
                 <div class="modal-botoes">
                     <button type="submit">Salvar</button>
                     <button type="button" id="fechar-modal-novo">Cancelar</button>

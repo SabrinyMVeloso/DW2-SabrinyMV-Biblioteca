@@ -1,4 +1,5 @@
-### Testes de API para Biblioteca Escolar
+cd C:\Users\sabriny_veloso\Documents\Av2CHATia\DW2-SabrinyMV-Bibliotecagit config --global user.name "SeuNomeNoGitHub"
+git config --global user.email "SeuEmailNoGitHub"### Testes de API para Biblioteca Escolar
 
 # Listar todos os livros
 GET http://localhost:8000/livros
