@@ -40,12 +40,17 @@ function getLivrosFiltrados() {
 
 function exportarCSV() {
 	const livros = getLivrosFiltrados();
-	if (!livros.length) return;
-	const header = Object.keys(livros[0]);
-	const csv = [header.join(',')].concat(
-		livros.map(l => header.map(h => '"' + String(l[h]).replace(/"/g, '""') + '"').join(','))
-	).join('\r\n');
-	const blob = new Blob([csv], { type: 'text/csv' });
+	if (!livros.length) {
+		mostrarToast('Nenhum livro para exportar', 'erro');
+		return;
+	}
+	const campos = ['titulo', 'autor', 'ano', 'genero', 'isbn', 'status', 'id'];
+	const header = campos.map(h => '"' + h + '"').join(',');
+	const rows = livros.map(l => campos.map(c => '"' + String(l[c] ?? '').replace(/"/g, '""') + '"').join(','));
+	// BOM para Excel em UTF-8
+	const bom = '\uFEFF';
+	const csv = bom + [header].concat(rows).join('\r\n');
+	const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
 	const url = URL.createObjectURL(blob);
 	const a = document.createElement('a');
 	a.href = url;
@@ -54,12 +59,23 @@ function exportarCSV() {
 	a.click();
 	document.body.removeChild(a);
 	URL.revokeObjectURL(url);
+	mostrarToast('Exportado CSV com sucesso', 'sucesso');
 }
 
 function exportarJSON() {
 	const livros = getLivrosFiltrados();
-	if (!livros.length) return;
-	const blob = new Blob([JSON.stringify(livros, null, 2)], { type: 'application/json' });
+	if (!livros.length) {
+		mostrarToast('Nenhum livro para exportar', 'erro');
+		return;
+	}
+	// Exporta somente campos públicos desejados
+	const campos = ['titulo', 'autor', 'ano', 'genero', 'isbn', 'status', 'id'];
+	const dados = livros.map(l => {
+		const obj = {};
+		campos.forEach(c => obj[c] = l[c] ?? null);
+		return obj;
+	});
+	const blob = new Blob([JSON.stringify(dados, null, 2)], { type: 'application/json' });
 	const url = URL.createObjectURL(blob);
 	const a = document.createElement('a');
 	a.href = url;
@@ -68,6 +84,7 @@ function exportarJSON() {
 	a.click();
 	document.body.removeChild(a);
 	URL.revokeObjectURL(url);
+	mostrarToast('Exportado JSON com sucesso', 'sucesso');
 }
 
 if (btnExportarCSV) btnExportarCSV.addEventListener('click', exportarCSV);
@@ -170,6 +187,8 @@ formNovoLivro.addEventListener('submit', async function (e) {
 
 // URL da API backend
 const API_URL = 'http://127.0.0.1:8000/livros';
+// Base da API (usada para servir capas enviadas ao backend)
+const API_BASE = API_URL.replace(/\/livros\/?$/i, '');
 
 // Elementos DOM
 const listaLivros = document.getElementById('livros-lista');
@@ -177,6 +196,9 @@ const filtroGenero = document.getElementById('filtro-genero');
 const filtroAno = document.getElementById('filtro-ano');
 const filtroStatus = document.getElementById('filtro-status');
 const searchInput = document.getElementById('search');
+const menuToggle = document.getElementById('menu-toggle');
+const sidebar = document.querySelector('.sidebar');
+const overlayMenu = document.getElementById('overlay-menu');
 
 
 
@@ -229,7 +251,8 @@ function exibirLivros(livros) {
 			'A Revolução dos Bichos': {capa: 'revolucao-dos-bichos.jpg', genero: 'Distopia', ano: 1945}
 		};
 		if (livro.capa) {
-			nomeCapa = `/capas/${livro.capa}`;
+			// usar URL do backend para capas customizadas
+			nomeCapa = `${API_BASE}/capas/${livro.capa}`;
 		} else if (map[livro.titulo]) {
 			nomeCapa = `capas/${map[livro.titulo].capa}`;
 			if (!livro.genero || livro.genero === 'Outros') livro.genero = map[livro.titulo].genero;
@@ -249,12 +272,33 @@ function exibirLivros(livros) {
 			<button class="btn-emprestimo" data-id="${livro.id}" data-status="${livro.status}">
 				${livro.status === 'disponível' ? 'Emprestar' : 'Devolver'}
 			</button>
+			<button class="btn-excluir" data-id="${livro.id}" aria-label="Excluir livro ${livro.titulo}">Excluir</button>
 		</div>
 		`;
 	}).join('');
 	// Adicionar eventos aos botões de empréstimo/devolução
 	document.querySelectorAll('.btn-emprestimo').forEach(btn => {
 		btn.addEventListener('click', abrirModalEmprestimo);
+	});
+	// Adicionar eventos aos botões de exclusão
+	document.querySelectorAll('.btn-excluir').forEach(btn => {
+		btn.addEventListener('click', async (e) => {
+			e.stopPropagation();
+			const id = btn.getAttribute('data-id');
+			if (!id) return;
+			if (!confirm('Confirma exclusão deste livro? Esta ação não pode ser desfeita.')) return;
+			try {
+				const resp = await fetch(`${API_URL}/${id}`, { method: 'DELETE' });
+				if (!resp.ok) {
+					const err = await resp.json().catch(() => ({}));
+					throw new Error(err.detail || 'Erro ao excluir livro');
+				}
+				mostrarToast('Livro excluído com sucesso', 'sucesso');
+				await carregarLivros();
+			} catch (err) {
+				mostrarToast(err.message || 'Erro ao excluir', 'erro');
+			}
+		});
 	});
 }
 
@@ -418,3 +462,34 @@ searchInput.addEventListener('input', aplicarFiltros);
 
 // Inicialização
 window.addEventListener('DOMContentLoaded', carregarLivros);
+
+// Menu toggle behavior
+if (menuToggle && sidebar && overlayMenu) {
+	function openMenu() {
+		sidebar.classList.add('open');
+		overlayMenu.classList.add('active');
+		overlayMenu.setAttribute('aria-hidden', 'false');
+		menuToggle.setAttribute('aria-pressed', 'true');
+	}
+	function closeMenu() {
+		sidebar.classList.remove('open');
+		overlayMenu.classList.remove('active');
+		overlayMenu.setAttribute('aria-hidden', 'true');
+		menuToggle.setAttribute('aria-pressed', 'false');
+	}
+	// ensure aria defaults
+	overlayMenu.setAttribute('aria-hidden', 'true');
+	menuToggle.setAttribute('aria-pressed', 'false');
+	menuToggle.addEventListener('click', () => {
+		const opened = sidebar.classList.contains('open');
+		if (opened) {
+			closeMenu();
+			document.body.classList.remove('sidebar-open');
+		} else {
+			openMenu();
+			document.body.classList.add('sidebar-open');
+		}
+	});
+	overlayMenu.addEventListener('click', closeMenu);
+	window.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeMenu(); });
+}

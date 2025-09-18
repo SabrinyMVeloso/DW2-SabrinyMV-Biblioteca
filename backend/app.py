@@ -10,6 +10,7 @@ from pydantic import BaseModel, Field
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
 import os
+from seed import seed
 
 
 app = FastAPI()
@@ -58,6 +59,11 @@ class LivroOut(LivroBase):
 
 # Inicializar tabelas
 criar_tabelas()
+# Popula o banco automaticamente se estiver vazio
+try:
+	seed()
+except Exception as e:
+	print(f"[AVISO] Não foi possível rodar seed automaticamente: {e}")
 
 # Rotas CRUD
 @app.get("/livros", response_model=List[LivroOut])
@@ -96,6 +102,7 @@ async def criar_livro(
 		caminho = os.path.join(UPLOAD_DIR, nome_arquivo)
 		with open(caminho, "wb") as f:
 			f.write(await capa.read())
+		print(f"[UPLOAD] Capa salva em: {caminho}")
 	novo_livro = Livro(
 		titulo=titulo,
 		autor=autor,
@@ -115,7 +122,9 @@ async def criar_livro(
 def get_capa(nome_capa: str):
 	caminho = os.path.join(UPLOAD_DIR, nome_capa)
 	if not os.path.exists(caminho):
+		print(f"[CAPA] Tentativa de acessar capa inexistente: {caminho}")
 		raise HTTPException(status_code=404, detail="Capa não encontrada")
+	print(f"[CAPA] Servindo capa: {caminho}")
 	return FileResponse(caminho)
 
 @app.put("/livros/{livro_id}", response_model=LivroOut)

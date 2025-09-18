@@ -215,23 +215,25 @@
 /* Paleta de cores e fonte */
 
 :root {
-    --cor-primaria: #2563eb; /* Azul médio */
-    --cor-secundaria: #fbbf24; /* Amarelo suave */
-    --cor-acento: #22c55e; /* Verde vibrante */
-    --cor-fundo: #f4f6fb; /* Cinza azulado claro */
-    --cor-fundo-card: #fff;
-    --cor-fundo-sidebar: #f1f5f9;
-    --cor-texto: #1e293b;
-    --cor-texto-secundario: #64748b;
-    --cor-borda: #e2e8f0;
+    /* Paleta fornecida: 086788, 07A0C3, F0C808, FFF1D0, DD1C1A */
+    --cor-primaria: #086788; /* Blue Sapphire */
+    --cor-secundaria: #07A0C3; /* Blue Green - acentos */
+    --cor-acento: #F0C808; /* Jonquil - destaque */
+    --cor-fundo: #FFF1D0; /* Papaya Whip - fundo suave */
+    --cor-fundo-card: #ffffff; /* branco para cartões */
+    --cor-fundo-sidebar: #f8f6f2; /* leve variação do fundo */
+    --cor-texto: #08323a; /* texto escuro harmonizado */
+    --cor-texto-secundario: #4b6b72;
+    --cor-borda: #e6e2da;
     --fonte: 'Inter', 'Roboto', sans-serif;
 }
 
 
 body {
-    background: var(--cor-fundo);
+    background: linear-gradient(180deg, #fffdfa 0%, var(--cor-fundo) 100%);
     color: var(--cor-texto);
     font-family: var(--fonte);
+    font-weight: 500; /* slightly bolder base text */
     margin: 0;
     padding: 0;
     min-height: 100vh;
@@ -239,32 +241,69 @@ body {
 
 
 .header {
-    background: var(--cor-primaria);
+    background: linear-gradient(90deg, rgba(8,103,136,0.95), rgba(7,160,195,0.95));
     color: #fff;
-    padding: 1.2rem 2.5rem;
+    padding: 1.1rem 2rem;
     display: flex;
     align-items: center;
     justify-content: space-between;
     position: sticky;
     top: 0;
     z-index: 10;
-    box-shadow: 0 2px 12px rgba(37, 99, 235, 0.08);
-    border-bottom: 2px solid var(--cor-borda);
+    box-shadow: 0 6px 24px rgba(8,103,136,0.12);
+    border-bottom: 1px solid rgba(0,0,0,0.06);
 }
 
 .header h1 {
     margin: 0;
-    font-size: 2rem;
-    letter-spacing: 1px;
+    font-size: 1.6rem;
+    letter-spacing: 0.6px;
+    font-weight: 800; /* increase thickness */
 }
 
 .header input[type="search"] {
-    padding: 0.5rem 1rem;
-    border-radius: 4px;
-    border: 1px solid #ccc;
+    padding: 0.5rem 0.9rem;
+    border-radius: 10px;
+    border: none;
     font-size: 1rem;
-    min-width: 220px;
+    min-width: 320px; /* aumentar largura mínima para caber o placeholder */
+    width: clamp(220px, 36vw, 520px);
+    background: rgba(255,255,255,0.12);
+    color: #fff;
+    font-weight: 700; /* aumentar espessura do texto no campo de busca */
+    letter-spacing: 0.2px;
 }
+
+.header input[type="search"]::placeholder { color: rgba(255,255,255,0.8); font-weight: 600; }
+
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+}
+
+.menu-toggle {
+    background: rgba(255,255,255,0.12);
+    border: none;
+    color: #fff;
+    font-size: 1.1rem;
+    padding: 0.45rem 0.6rem;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.menu-toggle:focus,
+.menu-toggle:hover { outline: 2px solid rgba(240,200,8,0.9); }
+
+.overlay-menu {
+    position: fixed;
+    inset: 0 0 0 0;
+    background: rgba(0,0,0,0.35);
+    display: none;
+    z-index: 900;
+}
+
+.overlay-menu.active { display: block; }
 
 
 .container {
@@ -275,12 +314,23 @@ body {
 
 
 .sidebar {
+    /* Hidden off-canvas by default; opens when .open is added or body.sidebar-open is set */
     background: var(--cor-fundo-sidebar);
     border-right: 1px solid var(--cor-borda);
-    padding: 2.2rem 1.2rem 2rem 1.2rem;
-    width: 250px;
-    min-width: 200px;
-    box-shadow: 2px 0 8px rgba(37, 99, 235, 0.03);
+    padding: 2rem 1.2rem;
+    width: 280px;
+    min-width: 220px;
+    box-shadow: 2px 0 18px rgba(8,103,136,0.03);
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    position: fixed;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    transform: translateX(-110%);
+    transition: transform 220ms ease;
+    z-index: 1001;
 }
 
 .sidebar h2 {
@@ -324,17 +374,17 @@ body {
 
 .main-content {
     flex: 1;
-    padding: 2.5rem 3vw 2rem 3vw;
+    padding: 2rem 1.5rem 2rem 1.5rem; /* reduzir espaço entre sidebar e conteúdo */
     min-width: 0;
-    background: var(--cor-fundo);
+    background: transparent;
 }
 
 
 .livros-lista {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
-    gap: 2rem 2.5rem;
-    margin-top: 1.5rem;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1.6rem 1.8rem;
+    margin-top: 1.2rem;
 }
 
 /* Card de livro */
@@ -342,24 +392,29 @@ body {
 .livro-card {
     background: var(--cor-fundo-card);
     border-radius: 12px;
-    box-shadow: 0 4px 16px rgba(37, 99, 235, 0.07);
-    padding: 1.5rem 1.2rem 1.2rem 1.2rem;
+    box-shadow: 0 8px 30px rgba(8,103,136,0.06);
+    padding: 1.2rem 1.2rem;
     display: flex;
     flex-direction: column;
-    gap: 0.7rem;
-    border-left: 6px solid var(--cor-acento);
-    transition: box-shadow 0.2s, border-color 0.2s;
+    gap: 0.6rem;
+    border-left: 6px solid rgba(240,200,8,0.95); /* destaque warm */
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.livro-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 18px 40px rgba(8,103,136,0.08);
 }
 
 .capa-livro {
-    width: 100px;
-    height: auto;
+    width: 120px;
+    height: 160px;
     align-self: center;
-    border-radius: 6px;
-    box-shadow: 0 2px 8px #0001;
-    margin-bottom: 0.7em;
+    border-radius: 8px;
+    box-shadow: 0 6px 18px rgba(8,103,136,0.06);
+    margin-bottom: 0.8em;
     object-fit: cover;
-    background: #f3f3f3;
+    background: linear-gradient(180deg, #fff, #f7f5f0);
 }
 
 .livro-card[tabindex] {
@@ -368,10 +423,10 @@ body {
 
 
 .livro-card .titulo {
-    font-size: 1.18rem;
-    font-weight: 600;
+    font-size: 1.06rem;
+    font-weight: 700;
     color: var(--cor-primaria);
-    margin-bottom: 0.2em;
+    margin-bottom: 0.15em;
 }
 
 
@@ -391,39 +446,78 @@ body {
 
 
 .livro-card .status {
-    font-weight: bold;
-    color: var(--cor-secundaria);
-    letter-spacing: 0.5px;
+    font-weight: 700;
+    color: #dd1c1a; /* vermelho para chamar atenção quando necessário */
+    letter-spacing: 0.2px;
+}
+
+.livro-card .status.disponivel {
+    color: rgba(7,160,195,1);
 }
 
 .livro-card .status.emprestado {
     color: #b91c1c;
 }
 
-.livro-card .status.disponivel {
-    color: var(--cor-acento);
-}
-
-.livro-card button {
-    margin-top: 0.5em;
-    padding: 0.4em 1em;
-    border-radius: 4px;
+.livro-card .btn-emprestimo {
+    margin-top: 0.4em;
+    padding: 0.45em 0.9em;
+    border-radius: 8px;
     border: none;
-    background: var(--cor-primaria);
+    background: linear-gradient(90deg, var(--cor-secundaria), rgba(7,160,195,0.9));
     color: #fff;
-    font-weight: bold;
+    font-weight: 700;
     cursor: pointer;
-    transition: background 0.2s;
+    transition: transform 0.12s ease, box-shadow 0.12s ease;
 }
 
-.livro-card button:focus,
-.livro-card button:hover {
-    background: var(--cor-secundaria);
-    outline: 2px solid var(--cor-acento);
+.livro-card .btn-excluir {
+    margin-top: 0.4em;
+    padding: 0.4em 0.9em;
+    border-radius: 8px;
+    border: 1px solid rgba(221,28,26,0.12);
+    background: #fff;
+    color: #dd1c1a;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.livro-card .btn-emprestimo:active {
+    transform: translateY(1px) scale(0.998);
+}
+
+.livro-card .btn-emprestimo:focus,
+.livro-card .btn-emprestimo:hover {
+    box-shadow: 0 6px 20px rgba(7,160,195,0.12);
+    outline: none;
+}
+
+.livro-card .btn-excluir:focus,
+.livro-card .btn-excluir:hover {
+    background: rgba(221,28,26,0.06);
+    outline: none;
 }
 
 /* Acessibilidade */
 :focus {
-    outline: 2px solid var(--cor-acento) !important;
-    outline-offset: 2px;
+    outline: 3px solid rgba(240,200,8,0.9) !important;
+    outline-offset: 3px;
+}
+
+/* Responsividade refinada */
+/* Sidebar open state applicable on all sizes */
+.sidebar.open { transform: translateX(0); }
+
+/* When sidebar is open shift main content to avoid overlap */
+body.sidebar-open .main-content { margin-left: 280px; }
+
+@media (max-width: 800px) {
+    .header input[type="search"] { min-width: 140px; }
+    .livros-lista { grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+    .main-content { padding-left: 1rem; }
+}
+
+@media (max-width: 480px) {
+    .capa-livro { width: 100px; height: 140px; }
+    .livro-card { padding: 1rem; }
 }

@@ -26,9 +26,13 @@
 
 <body>
     <header class="header">
-        <h1>Biblioteca Escolar</h1>
-        <input type="search" id="search" placeholder="Buscar por título ou autor" aria-label="Buscar livros">
+        <div class="header-left">
+            <button id="menu-toggle" aria-label="Abrir menu" class="menu-toggle">☰</button>
+            <h1>Biblioteca Escolar</h1>
+        </div>
+        <input type="search" id="search" placeholder="Pesquisar por título ou autor" aria-label="Pesquisar livros">
     </header>
+    <div id="overlay-menu" class="overlay-menu" aria-hidden="true"></div>
     <div class="container">
         <aside class="sidebar">
             <h2>Filtros</h2>
