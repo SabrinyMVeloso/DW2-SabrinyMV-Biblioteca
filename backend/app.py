@@ -138,6 +138,23 @@ def atualizar_livro(livro_id: int, livro: LivroUpdate, db: Session = Depends(get
 	db.refresh(db_livro)
 	return db_livro
 
+
+@app.post("/livros/{livro_id}/capa", response_model=LivroOut)
+async def upload_capa_livro(livro_id: int, capa: UploadFile = File(...), db: Session = Depends(get_db)):
+	db_livro = db.query(Livro).filter(Livro.id == livro_id).first()
+	if not db_livro:
+		raise HTTPException(status_code=404, detail="Livro não encontrado")
+	ext = os.path.splitext(capa.filename)[1].lower()
+	nome_arquivo = f"capa_{db_livro.titulo.replace(' ', '_')}_{int(datetime.now().timestamp())}{ext}"
+	caminho = os.path.join(UPLOAD_DIR, nome_arquivo)
+	with open(caminho, "wb") as f:
+		f.write(await capa.read())
+	print(f"[UPLOAD] Capa atualizada para livro id={livro_id}: {caminho}")
+	db_livro.capa = nome_arquivo
+	db.commit()
+	db.refresh(db_livro)
+	return db_livro
+
 @app.delete("/livros/{livro_id}", status_code=status.HTTP_204_NO_CONTENT)
 def deletar_livro(livro_id: int, db: Session = Depends(get_db)):
 	db_livro = db.query(Livro).filter(Livro.id == livro_id).first()
