@@ -254,11 +254,13 @@ function exibirLivros(livros) {
 			// usar URL do backend para capas customizadas
 			nomeCapa = `${API_BASE}/capas/${livro.capa}`;
 		} else if (map[livro.titulo]) {
-			nomeCapa = `capas/${map[livro.titulo].capa}`;
+			// carregar também pelo backend, para consistência entre capas customizadas e as estáticas
+			nomeCapa = `${API_BASE}/capas/${map[livro.titulo].capa}`;
 			if (!livro.genero || livro.genero === 'Outros') livro.genero = map[livro.titulo].genero;
 			if (!livro.ano) livro.ano = map[livro.titulo].ano;
 		} else {
-			nomeCapa = 'capas/sem-capa.png';
+			// usar sem-capa via backend também
+			nomeCapa = `${API_BASE}/capas/sem-capa.png`;
 			if (!livro.genero) livro.genero = 'Outros';
 		}
 		return `
@@ -286,8 +288,9 @@ function exibirLivros(livros) {
 			e.stopPropagation();
 			const id = btn.getAttribute('data-id');
 			if (!id) return;
-			if (!confirm('Confirma exclusão deste livro? Esta ação não pode ser desfeita.')) return;
 			try {
+				const confirmado = await pedirConfirmacao(`Confirma exclusão deste livro? Esta ação não pode ser desfeita.`);
+				if (!confirmado) return;
 				const resp = await fetch(`${API_URL}/${id}`, { method: 'DELETE' });
 				if (!resp.ok) {
 					const err = await resp.json().catch(() => ({}));
@@ -300,6 +303,54 @@ function exibirLivros(livros) {
 			}
 		});
 	});
+
+// Modal de confirmação acessível (retorna Promise<boolean>)
+const modalConfirmacao = document.getElementById('modal-confirmacao');
+const textoModalConfirmacao = document.getElementById('texto-modal-confirmacao');
+const btnConfirmarAcao = document.getElementById('confirmar-acao');
+const btnCancelarAcao = document.getElementById('cancelar-acao');
+
+function pedirConfirmacao(mensagem) {
+    return new Promise((resolve) => {
+        if (!modalConfirmacao) {
+            // fallback para confirm()
+            resolve(window.confirm(mensagem));
+            return;
+        }
+        textoModalConfirmacao.textContent = mensagem;
+        modalConfirmacao.style.display = 'flex';
+        // foco no botão cancelar por acessibilidade (evita ativação acidental)
+        btnCancelarAcao.focus();
+
+        function limparHandlers() {
+            btnConfirmarAcao.removeEventListener('click', onConfirm);
+            btnCancelarAcao.removeEventListener('click', onCancel);
+            window.removeEventListener('keydown', onKey);
+        }
+
+        function onConfirm() {
+            limparHandlers();
+            modalConfirmacao.style.display = 'none';
+            resolve(true);
+        }
+
+        function onCancel() {
+            limparHandlers();
+            modalConfirmacao.style.display = 'none';
+            resolve(false);
+        }
+
+        function onKey(e) {
+            if (e.key === 'Escape') {
+                onCancel();
+            }
+        }
+
+        btnConfirmarAcao.addEventListener('click', onConfirm);
+        btnCancelarAcao.addEventListener('click', onCancel);
+        window.addEventListener('keydown', onKey);
+    });
+}
 }
 
 // Modal Empréstimo/Devolução
