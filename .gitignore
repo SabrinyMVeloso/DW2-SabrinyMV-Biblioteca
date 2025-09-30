@@ -3,8 +3,8 @@ __pycache__/
 *.pyc
 *.pyo
 *.pyd
-*.db
-app.db
+backend/app.db
+frontend/capas/*
 .env
 venv/
 .env*/
@@ -21,3 +21,10 @@ node_modules/
 
 # Outros
 *.log
+
+# Project-specific
+# Ignore the SQLite DB (local dev copy) and frontend cover images folder (if you
+# don't want to version user-uploaded images). Adjust if you prefer to keep some
+# images in the repo.
+# If you want to keep specific covers, add them explicitly, e.g.:
+# !frontend/capas/pequeno-principe.webp
